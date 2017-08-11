@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+
+	<!-- setting -->
+	<settings 
+	    cacheModelsEnabled="true" 
+	    enhancementEnabled="true"
+		lazyLoadingEnabled="true" 
+		maxRequests="32" 
+		maxSessions="10"
+		maxTransactions="5" 
+		useStatementNamespaces="true" />
+	
+ 	<transactionManager type="JDBC">
+ 	    
+	    <dataSource type="SIMPLE">
+	      <property name="JDBC.Driver"        value="com.mysql.jdbc.Driver"/>
+	      <property name="JDBC.ConnectionURL" value="jdbc:mysql://127.0.0.1:3306/ASDB"/>
+	      <property name="JDBC.Username"      value="asmuser"/>
+	      <property name="JDBC.Password"      value="manager"/>
+	    </dataSource>
+
+ 	    
+		  <!-- <dataSource type="JNDI">
+		      <property name="DataSource" value="java:comp/env/jdbc/asm_mysql" />
+		  </dataSource> -->
+	</transactionManager>
+	
+ 	<!-- CommonSql이 상단에 include 되어야 한다. -->
+ 	<sqlMap resource="com/nwtns/nas/sqlmap/UserSql.xml" />
+ 	<sqlMap resource="com/nwtns/nas/sqlmap/CallSql.xml" />
+ 	<sqlMap resource="com/nwtns/nas/sqlmap/RptSql.xml" />
+ 	<sqlMap resource="com/nwtns/nas/sqlmap/MasterSql.xml" />
+
+	
+</sqlMapConfig>

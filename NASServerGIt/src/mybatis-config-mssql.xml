@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <!-- 
+    [Settings 속성]
+		cacheEnabled - 설정에서 각 mapper에 설정된 캐시를 전역적으로 사용할지 말지에 대한 여부
+		lazyLoadingEnabled - 늦은 로딩을 사용할지에 대한 여부. 사용하지 않는다면 모두 즉시 로딩할 것이다.
+		aggressiveLazyLoading - 활성화 상태로 두게 되면 늦은(lazy) 로딩 프로퍼티를 가진 객체는 호출에 따라 로드될 것이다. 반면에 개별 프로퍼티는 요청할때 로드된다.
+		multipleResultSetsEnabled - 한개의 구문에서 여러개의 ResultSet을 허용할지의 여부(드라이버가 해당 기능을 지원해야 함)
+		useColumnLabel - 칼럼명 대신에 칼럼라벨을 사용. 드라이버마다 조금 다르게 작동한다. 문서와 간단한 테스트를 통해 실제 기대하는 것처럼 작동하는지 확인해야 한다.
+		useGeneratedKeys - 생성키에 대한 JDBC지원을 허용. 지원하는 드라이버가 필요하다. true로 설정하면 생성키를 강제로 생성한다. 일부 드라이버(예를들면, Derby)에서는 이 설정을 무시한다.
+		autoMappingBehavior - MyBatis가 칼럼을 필드/프로퍼티에 자동으로 매핑할지와 방법에 대해 명시. PARTIAL은 간단한 자동매핑만 할뿐, 내포된 결과에 대해서는 처리하지 않는다. FULL은 처리가능한 모든 자동매핑을 처리한다.
+		defaultExecutorType - 디폴트 실행자(executor) 설정. SIMPLE 실행자는 특별히 하는 것이 없다. REUSE 실행자는 PreparedStatement 를 재사용한다. BATCH실행자는 구문을 재사용하고 수정을 배치처리한다.
+		defaultStatementTimeout - 데이터베이스로의 응답을 얼마나 오래 기다릴지를 판단하는 타임아웃을 셋팅    
+     -->
+	<settings>
+       <setting name="callSettersOnNulls" value="true"/>
+<!-- 		<setting name="cacheEnabled" value="true" /> 
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="false" />
+		<setting name="enhancementEnabled" value="false" />
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<setting name="defaultStatementTimeout" value="25000" /> -->
+	</settings>
+	<!-- Type alias
+	<typeAliases>
+		<typeAlias alias="UserDTO" type="com.livesupp.biz.dto.UserDTO" />
+		<typeAlias alias="Menu1DTO" type="com.livesupp.biz.dto.Menu1DTO" />
+	</typeAliases>
+	-->
+	<!-- 
+	[DataSource]
+	 poolMaximumActiveConnections – 주어진 시간에 존재할 수 있는 활성화된(사용중인) 커넥션의 수. 디폴트는 10이다.
+	 poolMaximumIdleConnections – 주어진 시간에 존재할 수 있는 유휴 커넥션의 수
+	 poolMaximumCheckoutTime – 강제로 리턴되기 전에 풀에서 “체크아웃” 될 수 있는 커넥션의 시간. 디폴트는 20000ms(20초)
+	 poolTimeToWait – 풀이 로그 상태를 출력하고 비정상적으로 긴 경우 커넥션을 다시 얻을려고 시도하는 로우 레벨 셋팅. 디폴트는 20000ms(20초)
+	 poolPingQuery – 커넥션이 작업하기 좋은 상태이고 요청을 받아서 처리할 준비가 되었는지 체크하기 위해 데이터베이스에 던지는 핑쿼리(Ping Query). 디폴트는 “핑 쿼리가 없음” 이다. 이 설정은 대부분의 데이터베이스로 하여금 에러메시지를 보게 할수도 있다.
+	 poolPingEnabled – 핑쿼리를 사용할지 말지를 결정. 사용한다면, 오류가 없는(그리고 빠른) SQL 을 사용하여 poolPingQuery 프로퍼티를 셋팅해야 한다. 디폴트는 false이다.
+	 poolPingConnectionsNotUsedFor – poolPingQuery 가 얼마나 자주 사용될지 설정한다. 필요이상의 핑을 피하기 위해 데이터베이스의 타임아웃 값과 같을 수 있다. 디폴트는 0이다. 디폴트 값은 poolPingEnabled 가 true일 경우에만, 모든 커넥션이 매번 핑을 던지는 값이다.	
+	 -->
+	<environments default="development">
+<!-- 		<environment id="development">
+				<transactionManager type="JDBC"  >
+				    <property name="JDBC.DefaultAutoCommit" value="false"/>
+				    <property name="JDBC.CommitRequired" value="true"/>
+				</transactionManager>
+	   			<dataSource type="JNDI">
+       				<property name="initial_context" value="java:/comp/env"/>
+       				<property name="data_source" value="jdbc/otgsmo_prod"/>
+	   			</dataSource> 
+		</environment> -->
+		<environment id="development">
+				<transactionManager type="JDBC"  >
+				    <property name="JDBC.DefaultAutoCommit" value="false"/>
+				    <property name="JDBC.CommitRequired" value="true"/>
+				</transactionManager>
+	   			<dataSource type="JNDI">
+       				<property name="initial_context" value="java:/comp/env"/>
+       				<property name="data_source" value="jdbc/haitai_mssql"/>
+       				<property name="poolPingQuery" value="select 1"/>
+			        <property name="poolPingEnabled" value="true"/>
+			        <property name="poolPingConnectionsNotUsedFor" value="7200000"/>
+	   			</dataSource> 
+		</environment>
+	</environments>
+	<!-- mapper 등록 -->
+	<mappers>
+		<mapper resource="com/haitai/mobile/sqlmap/main/IncludeMap.xml" />
+	    <mapper resource="com/haitai/mobile/sqlmap/main/LogMap.xml" />
+	    <mapper resource="com/haitai/mobile/sqlmap/main/HomeMap.xml" />
+		<mapper resource="com/haitai/mobile/sqlmap/hainuri/AprMap.xml" />
+		<mapper resource="com/haitai/mobile/sqlmap/hainuri/ComMap.xml" />
+		<mapper resource="com/haitai/mobile/sqlmap/main/UserMap.xml" />
+		<mapper resource="com/haitai/mobile/sqlmap/main/SmsMap.xml" />
+	</mappers>
+</configuration>  

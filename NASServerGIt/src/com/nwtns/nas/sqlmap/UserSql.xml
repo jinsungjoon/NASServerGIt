@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ASUser">
+
+	<select id="getTest" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT 1 AS TEMP
+	]]>
+	</select>
+	
+	<select id="getUserInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASUser.getUserInfo */
+    	SELECT USER_ID, 
+		       USER_NAME,
+		       (CASE WHEN ROLE_CODE = '10' THEN '01'
+		             ELSE '02' END) AS SYS_GUBUN,
+		       ROLE_CODE,
+		       DEPT_CODE,
+		       ''                                          AS DEPT_NAME,
+		       ''                                          AS VALIDATION_KEY ,
+		       COALESCE(TEL_NO, '')						   AS TEL_NO,
+		       COALESCE(MOBILE_NO, '')					   AS MOBILE_NO,
+		       (SELECT MAX(VER_INFO)  FROM AS_TMA11
+		         WHERE APP_GUBUN = '10')                   AS CURR_VERSION,
+		       30 - DATEDIFF(CONVERT(LAST_PWDCHG_DATE, DATE), NOW()) AS PASSWD_EXP_DAYS,
+		       DATE_FORMAT(NOW(), '%Y%m%d')                AS SERVER_DATE,
+		       (CASE WHEN PASSWD = #passwd# THEN 'Y' 
+		             ELSE 'N' END)                         AS PWD_CHECK
+		  FROM AS_TMA50
+		 WHERE UPPER(USER_ID) = UPPER(#userId#)
+		   AND USE_YN  = 'Y'
+	]]>
+	</select>
+	
+	<select id="getSmartVersion" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASUser.getSmartVersion */
+    	SELECT MAX(VER_INFO) VER_INFO,
+    	       MAX(VER_INFO) CURR_VERSION
+		 FROM AS_TMA11
+		 WHERE APP_GUBUN = #osFlag#
+	]]>
+	</select>
+	
+</sqlMap>

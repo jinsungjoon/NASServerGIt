@@ -1,0 +1,413 @@
+@charset utf-8;
+
+		.wrap{
+			display:flex;
+			flex-flow:column nowrap;
+			width:80%;
+			margin:0 auto;
+			max-width:1200px;
+		}
+		.header{
+			display: flex;
+			flex-direction:row;
+			flex-wrap:nowrap;
+			width: 100%;
+			height: 80px;
+		}
+		.logo{
+		 width:100%;
+		 padding: 10px;
+		 background: url("../img/logo.gif");
+		 background-repeat: no-repeat; 
+		 background-position: center;
+		}
+		.content{
+			display: flex;
+			flex-flow:column wrap;
+			width: 100%;
+		}
+		.leftMain{
+			display: flex;
+			width: 100%;
+		}
+		.rightMain{
+			display: flex;
+			width: 100%;
+			background: url("../img/login_nas.png");
+		    background-repeat: no-repeat; 
+		    background-size: 100%;
+		    margin-bottom: 20px;
+		    height: 200px;
+		}
+		
+		input{
+			color: #1e1e1e;
+		    height: 50px;
+		    padding: 5px;
+		    width: 100%;
+		    font-weight: bold;
+	    	font-size: 16px;
+		}
+		ul{
+			width: 100%;
+		}
+		ul > li{
+			width: 100%;
+			padding-bottom: 20px;
+		}
+		#userId{
+			background-image: url('../img/user.png') !important; 
+			background-repeat: no-repeat !important; 
+			background-position: 10px !important;
+			padding-left: 50px !important;
+		    width: 100% !important;
+		    box-sizing: border-box !important;
+			
+		}
+		
+		#userPass{
+			background-image: url('../img/locked.png') !important; 
+			background-repeat: no-repeat !important; 
+			background-position: 10px !important;
+			padding-left: 50px !important;
+		    width: 100% !important;
+		    box-sizing: border-box !important;
+		}
+		#userId:-webkit-autofill {
+		    -webkit-box-shadow: 0 0 0 1000px white inset;
+		    background-image: url('../img/user.png') !important; 
+			background-repeat: no-repeat !important; 
+			background-position: 10px !important;
+			padding-left: 50px !important;
+		    width: 100% !important;
+		    box-sizing: border-box !important;
+		}
+		
+		#userPass:-webkit-autofill {
+		    -webkit-box-shadow: 0 0 0 1000px white inset;
+		}
+		#userBtn{
+	        display: block;
+		    width: 100%;
+		    height: 50px;
+		    font-size: 18px;
+		    text-align: center;
+		    color: #fff;
+		    background: #4d87ef;
+		}
+		.liGroupBtn{
+			display: flex;
+			flex-flow:row wrap;
+			justify-content:center;
+			width: 100%;
+		}
+		.groupBtn{
+			 display: block;
+			 width: 100%;
+			 height: 30px;
+			 font-size: 13px;
+			 font:bold;
+			 text-align: center;
+			 color: #999;
+			 background: #fff;
+			 border: 1px solid #999;
+			 border-collapse: collapse;
+			 margin-top: 5px;
+		}
+		.groupBtn:HOVER {
+			background: #4d87ef;
+		    color: #fff;
+		}
+		.footer{
+			display:flex;
+			flex-flow:row wrap;
+		    width: 100%;
+		    background: #474747;
+		}
+		.footer p{
+			padding:10px;
+			display:flex;
+			width:100%;
+			padding-left: 3.125%;
+    		text-align: left;
+		    font-size: 0.813em;
+		    font-size: 0.813rem;
+		    text-align: center;
+		    text-transform: uppercase;
+		    font-weight: bold;
+		    color: #fff;
+		}
+	/* 태블릿용 CSS */
+	@media all and (min-width:768px){
+		.wrap{
+			display:flex;
+			flex-flow:column nowrap;
+			width:80%;
+			margin:0 auto;
+			max-width:1200px;
+		}
+		.header{
+			display: flex;
+			flex-direction:row;
+			flex-wrap:nowrap;
+			width: 100%;
+			height: 80px;
+		}
+		.logo{
+		 width:100%;
+		 padding: 10px;
+		 background: url("../img/logo.gif");
+		 background-repeat: no-repeat; 
+		 background-position: center;
+		}
+		.content{
+			display: flex;
+			flex-flow:column wrap;
+			width: 100%;
+		}
+		.leftMain{
+			display: flex;
+			width: 100%;
+		}
+		.rightMain{
+			display: flex;
+			width: 100%;
+			background: url("../img/login_nas.png");
+		    background-repeat: no-repeat; 
+		    background-size: 100%;
+			height: 400px;
+		    margin-bottom: 50px;
+		}
+		
+		input{
+			color: #1e1e1e;
+		    height: 50px;
+		    padding: 5px;
+		    width: 100%;
+		    font-weight: bold;
+	    	font-size: 16px;
+		}
+		ul{
+			width: 100%;
+		}
+		ul > li{
+			width: 100%;
+			padding-bottom: 20px;
+		}
+		#userId{
+			background-image: url('../img/user.png') !important; 
+			background-repeat: no-repeat !important; 
+			background-position: 10px !important;
+			padding-left: 50px !important;
+		    width: 100% !important;
+		    box-sizing: border-box !important;
+			
+		}
+		
+		#userPass{
+			background-image: url('../img/locked.png') !important; 
+			background-repeat: no-repeat !important; 
+			background-position: 10px !important;
+			padding-left: 50px !important;
+		    width: 100% !important;
+		    box-sizing: border-box !important;
+		}
+		#userId:-webkit-autofill {
+		    -webkit-box-shadow: 0 0 0 1000px white inset;
+		}
+		
+		#userPass:-webkit-autofill {
+		    -webkit-box-shadow: 0 0 0 1000px white inset;
+		}
+		
+		#userBtn{
+	        display: block;
+		    width: 100%;
+		    height: 50px;
+		    font-size: 18px;
+		    text-align: center;
+		    color: #fff;
+		    background: #4d87ef;
+		}
+		.liGroupBtn{
+			display: flex;
+			flex-flow:row no-wrap;
+			justify-content:center;
+			width: 100%;
+		}
+		.groupBtn{
+			 display: block;
+			 width: 33%;
+			 height: 30px;
+			 font-size: 13px;
+			 font:bold;
+			 text-align: center;
+			 color: #999;
+			 background: #fff;
+			 border: 1px solid #999;
+			 border-collapse: collapse;
+		}
+		.groupBtn:nth-child(2), .groupBtn:nth-child(3){
+			border-left: 0px;
+		}
+		.groupBtn:HOVER {
+			background: #4d87ef;
+		    color: #fff;
+		}
+		.footer{
+			display:flex;
+			flex-flow:row wrap;
+		    width: 100%;
+		    background: #474747;
+		}
+		.footer p{
+			padding:10px;
+			display:flex;
+			width:100%;
+			padding-left: 3.125%;
+    		text-align: left;
+   		    padding: 20px;
+		    font-size: 0.813em;
+		    font-size: 0.813rem;
+		    text-align: left;
+		    text-transform: uppercase;
+		    font-weight: bold;
+		    color: #fff;
+		}
+	}
+	/* PC용 CSS */
+	@media all and (min-width:960px){
+		.wrap{
+			display:flex;
+			flex-flow:column nowrap;
+			width:80%;
+			margin:0 auto;
+			max-width:1200px;
+		}
+		.header{
+			display: flex;
+			flex-direction:row;
+			flex-wrap:nowrap;
+			width: 100%;
+			height: 80px;
+		}
+		.logo{
+		 width:100%;
+		 padding: 10px;
+		 background: url("../img/logo.gif");
+		 background-repeat: no-repeat; 
+		 background-position: left;
+		}
+		.content{
+			display: flex;
+			flex-flow:row nowrap;
+			width: 100%;
+			height: 500px;
+		}
+		.leftMain{
+			display: flex;
+			width: 50%;
+		}
+		.rightMain{
+			display: flex;
+			width: 50%;
+			background: url("../img/login_nas.png");
+		    background-repeat: no-repeat; 
+		    background-size: 100%;
+		    margin-bottom: 50px;
+		}
+		
+		input{
+			color: #1e1e1e;
+		    height: 50px;
+		    padding: 5px;
+		    width: 100%;
+		    font-weight: bold;
+	    	font-size: 16px;
+		}
+		ul{
+			width: 90%;
+		}
+		ul > li{
+			width: 100%;
+			padding-bottom: 20px;
+		}
+		#userId{
+			background-image: url('../img/user.png') !important; 
+			background-repeat: no-repeat !important; 
+			background-position: 10px !important;
+			padding-left: 50px !important;
+		    width: 100% !important;
+		    box-sizing: border-box !important;
+			
+		}
+		
+		#userPass{
+			background-image: url('../img/locked.png') !important; 
+			background-repeat: no-repeat !important; 
+			background-position: 10px !important;
+			padding-left: 50px !important;
+		    width: 100% !important;
+		    box-sizing: border-box !important;
+		}
+		#userId:-webkit-autofill {
+		    -webkit-box-shadow: 0 0 0 1000px white inset;
+		}
+		
+		#userPass:-webkit-autofill {
+		    -webkit-box-shadow: 0 0 0 1000px white inset;
+		}
+		#userBtn{
+	        display: block;
+		    width: 100%;
+		    height: 50px;
+		    font-size: 18px;
+		    text-align: center;
+		    color: #fff;
+		    background: #4d87ef;
+		}
+		.liGroupBtn{
+			display: flex;
+			flex-flow:row no-wrap;
+			justify-content:center;
+			width: 100%;
+		}
+		.groupBtn{
+			 display: block;
+			 width: 33%;
+			 height: 30px;
+			 font-size: 13px;
+			 font:bold;
+			 text-align: center;
+			 color: #999;
+			 background: #fff;
+			 border: 1px solid #999;
+			 border-collapse: collapse;
+		}
+		.groupBtn:nth-child(2), .groupBtn:nth-child(3){
+			border-left: 0px;
+		}
+		.groupBtn:HOVER {
+			background: #4d87ef;
+		    color: #fff;
+		}
+		.footer{
+			display:flex;
+			flex-flow:row wrap;
+		    width: 100%;
+		    background: #474747;
+		}
+		.footer p{
+			padding:10px;
+			display:flex;
+			width:100%;
+			padding-left: 3.125%;
+    		text-align: left;
+		    font-size: 0.813em;
+		    font-size: 0.813rem;
+		    text-align: left;
+		    text-transform: uppercase;
+		    font-weight: bold;
+		    color: #fff;
+		}
+	}

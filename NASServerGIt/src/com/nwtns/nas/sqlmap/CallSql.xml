@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ASCall">
+
+	<!-- 공통테이블 조회 -->
+	<select id="getCommonSearch" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASUser.getCommonSearch */
+    	SELECT CODE_VALUE, 
+    	       CODE_NAME, 
+    	       CODE_REF_VALUE1,
+               CODE_REF_VALUE2    
+          FROM AS_TMA10        
+         WHERE CODE_TYPE = #CODE_TYPE#  
+	]]>
+   	<isNotEmpty property="CODE_VALUE">
+   	<![CDATA[
+		   AND CODE_VALUE <> #CODE_VALUE#
+	]]>
+   	</isNotEmpty>
+         ORDER BY CODE_SORT   
+	</select>
+	
+	<!-- 고객사 조회 -->
+	<select id="getCustSearch" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASUser.getCustSearch */
+    	SELECT 'T_CUSTOMER', 
+    	       CUST_CODE as CODE_VALUE,
+    	       CUST_NAME as CODE_NAME, 1,
+    	       '',
+    	       ''
+		  FROM AS_TMA60
+		  WHERE USE_YN = 'Y'   
+	]]>
+	</select>
+	
+	
+	<!-- 고객사 - 사업부 조회 -->
+	<select id="getCustDivSearch" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASUser.getCustDivSearch */
+    	SELECT CUST_DIV    AS CODE_VALUE, 
+    	       DIV_NAME    AS CODE_NAME
+		  FROM AS_TMA61
+		 WHERE CUST_CODE = #CUST_CODE#
+		   AND USE_YN = 'Y'
+		 ORDER BY DIV_NAME 
+	]]>
+	</select>
+	
+	<!-- 고객사 - 사업부 - 프로젝트 조회 -->
+	<select id="getCustProjSearch" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASUser.getCustProjSearch */
+    	SELECT A.PRJ_NO      AS CODE_VALUE, 
+    	       A.PRJ_NAME    AS CODE_NAME,
+		       B.MAKER_CODE,
+		       B.GROUP_CODE,
+		       A.MODEL_CODE
+		  FROM AS_TMA55 A
+		  LEFT OUTER JOIN AS_TMA32 B
+            ON B.MODEL_CODE = A.MODEL_CODE
+		 WHERE A.CUST_CODE = #CUST_CODE#
+		   AND A.USE_YN = 'Y'
+		 ORDER BY A.PRJ_NAME   
+	]]>
+	</select>
+	
+	<select id="getCustDeptSearch" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASUser.getCustDeptSearch */
+    	SELECT CUST_DEPT       AS CODE_VALUE, 
+    	       DEPT_NAME       AS CODE_NAME
+		  FROM AS_TMA63
+		 WHERE CUST_CODE = #CUST_CODE#
+		   AND CUST_DIV  = #CUST_DIV#
+		   AND USE_YN = 'Y'
+		 ORDER BY DEPT_NAME
+	]]>
+	</select>
+</sqlMap>

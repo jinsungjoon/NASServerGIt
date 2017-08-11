@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ASMaster">
+
+	<select id="getTest" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT 1 AS TEMP
+	]]>
+	</select>
+	
+	<!-- 버전정보 조회 -->
+	<select id="getVersionInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASMaster.getVersionInfo */
+		SELECT APP_GUBUN, VER_INFO, MEMO,
+		       DATE_FORMAT(CREATE_DATE, '%Y-%m-%d %H:%i:%S') AS CREATE_DATE,
+		       DATE_FORMAT(UPDATE_DATE, '%Y-%m-%d %H:%i:%S') AS UPDATE_DATE
+		  FROM AS_TMA11
+	]]>
+	</select>
+	
+	<!-- 버전정보 변경 -->
+	<update id="setVerUpdate" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASCall.setCallUpdate */
+		UPDATE AS_TMA11
+		   SET   VER_INFO      = #newVersion#
+		       , MEMO          = #memo#
+		       , UPDATE_DATE   = NOW()
+		 WHERE APP_GUBUN = #appGubun#
+	]]>
+	</update>
+	
+	<!-- 사용자목록 조회 -->
+	<select id="getUserList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* ASMaster.getUserList */
+    	SELECT U2.USER_NAME, U2.USER_ID, U2.PASSWD, M1.CODE_NAME AS CODE_NAME1, M2.CODE_NAME AS CODE_NAME2, U2.TEL_NO, U2.MOBILE_NO, U2.EMAIL, U2.USE_YN
+		  FROM AS_TMA50 AS U1
+		  LEFT OUTER JOIN AS_TMA10 AS M1
+		    ON M1.CODE_TYPE = 'ROLE_CODE' AND U1.ROLE_CODE = M1.CODE_VALUE,
+		       AS_TMA50 AS U2
+		  LEFT OUTER JOIN AS_TMA10 AS M2
+		    ON M2.CODE_TYPE = 'JOB_CLASS' AND U2.JOB_CLASS = M2.CODE_VALUE
+		 WHERE U1.USER_ID = U2.USER_ID
+		   AND U1.ROLE_CODE <> '10'
+	]]>
+	<isNotEmpty prepend="AND" property="roleCode">
+		   U1.ROLE_CODE = #roleCode#
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="useYn">
+		   U1.USE_YN = #useYn#
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="searchValue">
+		   (U1.USER_NAME LIKE '%$searchValue$%' OR U1.USER_ID LIKE '%$searchValue$%')
+	</isNotEmpty>
+	<![CDATA[
+		 ORDER BY U1.JOB_CLASS
+	]]>
+	</select>
+	
+	
+</sqlMap>

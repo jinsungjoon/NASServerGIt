@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+
+	<!-- setting -->
+	<settings 
+	    cacheModelsEnabled="true" 
+	    enhancementEnabled="true"
+		lazyLoadingEnabled="true" 
+		maxRequests="32" 
+		maxSessions="10"
+		maxTransactions="5" 
+		useStatementNamespaces="true" />
+	
+ <transactionManager type="JDBC" commitRequired="false">
+	<dataSource type="SIMPLE">
+		<property name="JDBC.Driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+		<property name="JDBC.ConnectionURL" value="jdbc:sqlserver://127.0.0.1:1433;databaseName=testdb;integratedSecurity=true;"/>
+		<property name="JDBC.Username" value="sa"/>
+		<property name="JDBC.Password" value="nwtns01026"/>
+		<property name="Pool.MaximumIdleConnections" value="5"/>
+		<property name="Pool.MaximumCheckoutTime" value="120000"/>
+		<property name="Pool.TimeToWait" value="500"/>
+	</dataSource>
+</transactionManager>
+	
+ 	<!-- CommonSql이 상단에 include 되어야 한다. -->
+ 	<sqlMap resource="com/nwtns/nas/sqlmap/UserSql2.xml" />
+</sqlMapConfig>

@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ASUtil">
+    
+    <!-- 코드정보 조회 -->
+    <select id="getASMSeq" resultClass="string" parameterClass="java.util.HashMap">
+    <![CDATA[
+		SELECT getASMSeq(#tblName#, #pkey1#, #pkey2#)
+	]]>
+	</select>
+
+    <!-- 코드정보 조회 -->
+    <select id="getCodeData" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+		SELECT CODE_VALUE, CODE_NAME, CODE_REF_VALUE1, CODE_REF_VALUE2
+		  FROM AS_TMA10
+		 WHERE CODE_TYPE = #codeType#
+	]]>
+   	<isNotEmpty prepend="AND" property="useYn">
+  		       USE_YN = #useYn#
+   	</isNotEmpty>
+   	<isNotEmpty prepend="AND" property="codeValue">
+  		       CODE_VALUE = #codeValue#
+   	</isNotEmpty>
+   		<![CDATA[
+		 ORDER BY CODE_SORT
+	]]>
+	</select>
+    
+    <!-- SELECT-BOX - 제조사정보 조회 -->
+	<select id="getSeltProdMakerList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT MAKER_CODE  AS CODE, 
+    	       MAKER_NAME  AS VALUE
+		  FROM AS_TMA21
+		 WHERE 1=1
+	]]>
+   	<isNotEmpty prepend="AND" property="useYn">
+  		       USE_YN = #useYn#
+   	</isNotEmpty>
+   	<![CDATA[
+		 ORDER BY MAKER_NAME
+	]]>
+	</select>
+    
+    <!-- SELECT-BOX - 제품군 -->
+	<select id="getSeltProdGroupList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT GROUP_CODE  AS CODE, 
+    	       GROUP_NAME  AS VALUE
+		  FROM AS_TMA31
+		 WHERE 1=1
+	]]>
+   	<isNotEmpty prepend="AND" property="useYn">
+  		       USE_YN = #useYn#
+   	</isNotEmpty>
+   	<![CDATA[
+		 ORDER BY GROUP_NAME
+	]]>
+	</select>
+	
+	<!-- SELECT-BOX - 제품모델 -->
+	<select id="getSeltProdModelList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+		SELECT MODEL_CODE  AS CODE, 
+		       MODEL_NAME  AS VALUE
+		  FROM AS_TMA32
+		 WHERE 1=1
+	]]>
+	<isNotEmpty prepend="AND" property="makerCode">
+  		       MAKER_CODE = #makerCode#
+   	</isNotEmpty>
+   	<isNotEmpty prepend="AND" property="groupCode">
+  		       GROUP_CODE = #groupCode#
+   	</isNotEmpty>
+   	<isNotEmpty prepend="AND" property="useYn">
+  		       USE_YN = #useYn#
+   	</isNotEmpty>
+   		<![CDATA[
+		 ORDER BY MODEL_NAME
+	]]>
+	</select>
+	
+	<!-- SELECT-BOX - 사원정보 조회 -->
+    <select id="getSeltSawonList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT USER_ID    AS CODE, 
+    	       USER_NAME  AS VALUE,
+    	       IFNULL((SELECT CODE_NAME FROM AS_TMA10 WHERE CODE_TYPE = 'JOB_CLASS' AND CODE_VALUE = JOB_CLASS), '') AS JOB_CLASS_NAME
+		  FROM AS_TMA50
+		 WHERE 1=1
+	]]>
+   	<isNotEmpty prepend="AND" property="roleCode">
+  		       ROLE_CODE = #roleCode#
+   	</isNotEmpty>
+   	<isNotEmpty prepend="AND" property="useYn">
+  		       USE_YN = #useYn#
+   	</isNotEmpty>
+    <![CDATA[
+		 ORDER BY USER_NAME
+	]]>
+	</select>
+	
+    <!-- SELECT-BOX - 부서정보 조회 -->
+    <select id="getSeltDeptList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+		SELECT CODE_VALUE AS CODE, 
+		       CODE_NAME  AS VALUE
+		  FROM AS_TMA10
+		 WHERE CODE_TYPE = 'ROLE_CODE'
+		   AND CODE_VALUE <> '10'
+	]]>
+   	<isNotEmpty prepend="AND" property="useYn">
+  		       USE_YN = #useYn#
+   	</isNotEmpty>
+    <![CDATA[
+		 ORDER BY CODE_SORT
+	]]>
+	</select>
+	
+    
+
+	<!-- SELECT-BOX - 고객사리스트 조회 -->
+	<select id="getSeltCustList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT CUST_CODE    AS CODE, 
+    	       CUST_NAME    AS VALUE
+		  FROM AS_TMA60
+		 WHERE 1=1
+		   AND USE_YN = 'Y'
+	]]>
+   	<isNotEmpty prepend="AND" property="custCode">
+  		       CUST_CODE = #custCode#
+   	</isNotEmpty>
+    <![CDATA[
+		 ORDER BY CUST_NAME
+	]]>
+	</select>
+	
+	<!-- SELECT-BOX - 사업부리스트 조회 -->
+	<select id="getSeltCustDivList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT CUST_DIV    AS CODE, 
+    	       DIV_NAME    AS VALUE
+		  FROM AS_TMA61
+		 WHERE CUST_CODE = #custCode#
+		   AND USE_YN = 'Y'
+		 ORDER BY DIV_NAME
+	]]>
+	</select>
+	
+	<!-- SELECT-BOX - 프로젝트리스트 조회 -->
+	<select id="getSeltCustProjectList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT A.PRJ_NO      AS CODE, 
+    	       A.PRJ_NAME    AS VALUE,
+		       B.MAKER_CODE,
+		       B.GROUP_CODE,
+		       A.MODEL_CODE
+		  FROM AS_TMA55 A
+		  LEFT OUTER JOIN AS_TMA32 B
+            ON B.MODEL_CODE = A.MODEL_CODE
+		 WHERE A.CUST_CODE = #custCode#
+		   AND A.USE_YN = 'Y'
+	]]>
+   	<isNotEmpty prepend="AND" property="prjNo">
+  		       A.PRJ_NO = #prjNo#
+   	</isNotEmpty>
+    <![CDATA[
+		 ORDER BY A.PRJ_NAME
+	]]>
+	</select>
+	
+	<!-- SELECT-BOX - 영업소리스트 조회 -->
+	<select id="getSeltCustDeptList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT CUST_DEPT      AS CODE, 
+    	       DEPT_NAME      AS VALUE
+		  FROM AS_TMA63
+		 WHERE CUST_CODE = #custCode#
+		   AND CUST_DIV  = #custDiv#
+		   AND USE_YN = 'Y'
+		 ORDER BY DEPT_NAME
+	]]>
+	</select>
+	
+	<!-- SELECT - 영업소 정보 조회 -->
+	<select id="getSeltCustDeptInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	SELECT CUST_DIV 
+    	     , CUST_DEPT
+    	     , DEPT_NAME
+    	     , EMP_NAME
+    	     , TEL_NO
+    	     , MOBILE_NO
+		  FROM AS_TMA63
+		 WHERE CUST_CODE = #custCode#
+		   AND CUST_DIV  = #custDiv#
+		   AND CUST_DEPT  = #custDept#
+		   AND USE_YN = 'Y'
+		 ORDER BY DEPT_NAME
+	]]>
+	</select>
+	
+	<!-- 제품정보 조회 (조직, 모델 등의 정보 포함 -->
+	<select id="getProdInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+		/* getSeltProdInfo */
+		SELECT P.PROD_CODE,
+		       P.CUST_CODE,
+		       IFNULL(C.CUST_NAME, '') AS CUST_NAME,
+		       P.CUST_DIV,
+		       IFNULL(A.DIV_NAME, '')  AS DIV_NAME,
+		       P.CUST_DEPT,
+		       IFNULL(B.DEPT_NAME, '') AS DEPT_NAME,
+		       P.PRJ_NO,
+		       IFNULL(D.PRJ_NAME, '')  AS PRJ_NAME,
+		       M.GROUP_CODE,
+		       N.GROUP_NAME            AS GROUP_NAME,
+		       P.MODEL_CODE,
+		       M.MODEL_NAME            AS MODEL_NAME,
+		       P.CUST_POSITION,
+		       P.STATUS_FLAG,
+		       P.MEMO,
+		       '' AS TEL_NO,
+		       '' AS MOBILE_NO
+		  FROM AS_TMA32 M, AS_TMA31 N,
+		       AS_TMA71 P
+		  LEFT OUTER JOIN AS_TMA60 C
+		    ON C.CUST_CODE  = P.CUST_CODE
+		  LEFT OUTER JOIN AS_TMA61 A
+		    ON A.CUST_CODE  = P.CUST_CODE
+		   AND A.CUST_DIV   = P.CUST_DIV
+		   LEFT OUTER JOIN AS_TMA63 B
+		    ON B.CUST_CODE  = P.CUST_CODE
+		   AND B.CUST_DIV   = P.CUST_DIV
+		   AND B.CUST_DEPT  = P.CUST_DEPT
+		   LEFT OUTER JOIN AS_TMA55 D
+		    ON D.PRJ_NO     = P.PRJ_NO
+		 WHERE 1=1
+	]]>
+   	<isEmpty prepend="AND" property="equalTag">
+		       P.PROD_CODE LIKE '%$prodCode$%'
+   	</isEmpty>
+   	<isNotEmpty prepend="AND" property="equalTag">
+   		       ((#equalTag# = 'Y' AND P.PROD_CODE  = '$prodCode$') or (#equalTag# = 'N' AND P.PROD_CODE LIKE '%$prodCode$%'))
+   	</isNotEmpty>
+   	<![CDATA[
+   		   AND M.MODEL_CODE = P.MODEL_CODE
+		   AND N.GROUP_CODE = M.GROUP_CODE
+	]]>
+   	<isNotEmpty prepend="AND" property="custCode">
+  		       P.CUST_CODE  = #custCode#
+   	</isNotEmpty>
+   	<isNotEmpty prepend="AND" property="custDiv">
+  		       P.CUST_DIV   = #custDiv#
+   	</isNotEmpty>
+   	<isNotEmpty prepend="AND" property="custDept">
+  		       P.CUST_DIV   = #custDept#
+   	</isNotEmpty>
+   	<![CDATA[
+		 ORDER BY P.PROD_CODE
+	]]>
+	</select>
+	
+	<!-- 고객사 기본 프로젝트 -->
+	<select id="getCustDefaultProject" resultClass="string" parameterClass="string">
+    <![CDATA[
+    	SELECT MIN(A.PRJ_NO) AS prjNo
+		  FROM AS_TMA55 A
+		 WHERE A.CUST_CODE = #custCode#
+		   AND A.USE_YN    = 'Y'
+	]]>
+	</select>
+	
+	
+	<!-- 부품정보 조회 -->
+	<select id="getPartInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* "getPartInfo" */
+		SELECT A.PART_CODE AS CODE,
+		       A.PART_NAME AS VALUE,
+		       A.PART_MEMO,
+		       A.BUY_PRICE,
+		       A.BASE_PRICE,
+		       '0' AS APPLY_PRICE,
+		       A.UNIT
+		  FROM AS_TMA33 A
+		 WHERE A.MODEL_CODE = #modelCode#
+		   AND A.USE_YN = 'Y'
+		 ORDER BY A.PART_NAME ASC
+	]]>
+	</select>
+	
+	<!-- 거래처 부품정보 조회 -->
+	<!-- 기준단가(BASE_PRICE) : 미등록시 매입단가를 표시 한다. -->
+	<!-- AND A.MODEL_CODE = #modelCode# -->
+	<select id="getCustPart" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* getCustPart */
+		SELECT A.PART_CODE AS CODE,
+		       CONCAT('[', M.MODEL_NAME, '] ', A.PART_NAME) AS VALUE,
+		       A.PART_MEMO,
+		       A.BUY_PRICE,
+		       CASE WHEN A.BASE_PRICE IS NULL OR A.BASE_PRICE = '' THEN A.BUY_PRICE 
+		            ELSE A.BASE_PRICE END AS BASE_PRICE,
+		       CASE WHEN B.PRICE1 IS NOT NULL THEN B.PRICE1
+		            WHEN B.PRICE2 IS NOT NULL THEN B.PRICE2
+		            WHEN B.PRICE3 IS NOT NULL THEN B.PRICE3
+		            WHEN B.PRICE4 IS NOT NULL THEN B.PRICE4
+		            WHEN B.PRICE5 IS NOT NULL THEN B.PRICE5
+		            ELSE 0 END AS APPLY_PRICE,
+		       A.UNIT
+		  FROM (SELECT MODEL_CODE, MODEL_NAME
+				  FROM AS_TMA32
+				 WHERE MODEL_NAME IN (
+				SELECT CASE WHEN MODEL_NAME <> MODEL_GROUP THEN MODEL_GROUP
+				            ELSE MODEL_NAME END AS MODEL_NAME
+				  FROM AS_TMA32
+				 WHERE MODEL_CODE = #modelCode#)
+				 UNION 
+				SELECT MODEL_CODE, MODEL_NAME
+				  FROM AS_TMA32
+				 WHERE MODEL_CODE = #modelCode#) M,
+		       AS_TMA33 A
+		  LEFT OUTER JOIN AS_TMA35 B
+		    ON B.PART_CODE  = A.PART_CODE
+		   AND B.CUST_CODE  = #custCode#
+		   AND B.PRJ_NO     = #prjNo#
+		   AND B.USE_YN     = 'Y'
+		 WHERE 1=1
+		   AND A.MODEL_CODE = M.MODEL_CODE
+		   AND A.USE_YN = 'Y'
+		 ORDER BY M.MODEL_NAME ASC, A.PART_NAME ASC
+	]]>
+	</select>
+	
+	<!-- 납품정보 제품번호 조회 -->
+    <select id="getDeliveryProdCode" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+		SELECT PROD_CODE
+		  FROM AS_TMA83
+		 WHERE 1=1
+	]]>
+   	<isNotEmpty prepend="AND" property="delv_seq">
+  		       DELV_SEQ = #delv_seq#
+   	</isNotEmpty>
+   	<isNotEmpty prepend="AND" property="prod_seq">
+  		       PROD_SEQ = #prod_seq#
+   	</isNotEmpty>
+ 	<![CDATA[
+		 ORDER BY PROD_CODE ASC
+	]]>
+	</select>
+	
+</sqlMap>

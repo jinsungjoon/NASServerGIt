@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ASRpt">
+
+    <!-- 일별 장애접수현황 조회  -->
+    <!-- 접수일자 조건 변경 => 접수일 기준
+           AND M.IN_YMD <= REPLACE(#ymd#, '-', '')
+		   AND S.EX_YMD >= REPLACE(#ymd#, '-', '')
+    -->
+	<select id="getDDList2" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+    <![CDATA[
+    	/* getDDList2 */
+    SELECT *,(SELECT COUNT(*)
+			  FROM AS_TCL21 M
+					  LEFT OUTER JOIN AS_TMA60 A 
+						ON A.CUST_CODE = M.CUST_CODE
+					  LEFT OUTER JOIN AS_TMA61 B 
+						ON B.CUST_CODE = M.CUST_CODE
+					   AND B.CUST_DIV  = M.CUST_DIV
+					  LEFT OUTER JOIN AS_TMA63 C
+						ON C.CUST_CODE = M.CUST_CODE
+					   AND C.CUST_DIV  = M.CUST_DIV
+					   AND C.CUST_DEPT = M.CUST_DEPT
+				   ,
+				   AS_TCL22 S
+					  LEFT OUTER JOIN AS_TMA31 G
+						ON G.GROUP_CODE = S.GROUP_CODE
+					  LEFT OUTER JOIN AS_TMA32 P
+						ON P.MODEL_CODE = S.MODEL_CODE
+				      LEFT OUTER JOIN AS_TMA21 F
+				        ON F.MAKER_CODE = P.MAKER_CODE
+					  LEFT OUTER JOIN AS_TMA10 C1
+						ON C1.CODE_TYPE  = S.TROUBLE_TYPE
+					   AND C1.CODE_VALUE = S.TROUBLE_CODE
+					  LEFT OUTER JOIN AS_TMA10 C2
+						ON C2.CODE_TYPE  = 'REPAIR_STAUS_FLAG'
+					   AND C2.CODE_VALUE = S.STATUS_FLAG
+					  LEFT OUTER JOIN AS_TCL31 Z
+					    ON Z.CALL_SEQ    = S.CALL_SEQ
+					   AND Z.ITEM_SEQ    = S.ITEM_SEQ
+					   AND Z.PART_SEQ    = 1
+					  LEFT OUTER JOIN AS_TMA10 C3
+						ON C3.CODE_TYPE  = Z.ERROR_CODE
+					   AND C3.CODE_VALUE = Z.REPAIR_CODE
+			 WHERE 1=1
+			   AND M.CALL_SEQ = S.CALL_SEQ
+			   AND S.STATUS_FLAG >= '50'
+		]]>
+	   	<isNotEmpty property="ymd">
+	   	<![CDATA[
+			   AND M.YMD     = REPLACE(#ymd#, '-', '')
+		]]>
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="ym">
+	  		       M.YMD   LIKE  REPLACE('$ym$%', '-', '')
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="custCode">
+	  		       M.CUST_CODE = #custCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="custDiv">
+	  		       M.CUST_DIV  = #custDiv#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="makerCode">
+	  		       F.MAKER_CODE = #makerCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="groupCode">
+	  		       G.GROUP_CODE = #groupCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="modelCode">
+	  		       P.MODEL_CODE = #modelCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="searchValue">
+	  		       S.PROD_CODE LIKE  #searchValue#
+	   	</isNotEmpty>
+	   	
+	   	<!-- ORDER BY -->
+	   	<isEqual  property="sortTag" compareValue="0">
+	  		ORDER BY M.CALL_SEQ ASC, S.ITEM_SEQ
+	   	</isEqual >
+	   	<isEqual  property="sortTag" compareValue="1">
+	  		ORDER BY A.CUST_NAME, M.CALL_SEQ, S.ITEM_SEQ
+	   	</isEqual >
+	   	<isEqual  property="sortTag" compareValue="2">
+	  		ORDER BY F.MAKER_NAME, G.GROUP_NAME, P.MODEL_NAME, M.CALL_SEQ ASC, S.ITEM_SEQ
+	   	</isEqual >
+	   	<isEqual  property="sortTag" compareValue="3">
+	  		ORDER BY C1.CODE_NAME, M.CALL_SEQ ASC, S.ITEM_SEQ
+	   	</isEqual >) AS TOTCNT
+	   	<![CDATA[
+ 	 FROM (
+    	SELECT  (@ROWNUM := @ROWNUM + 1) RNUM ,X.*  FROM(
+			SELECT M.CALL_SEQ,
+			       S.ITEM_SEQ,
+			       S.STATUS_FLAG,
+			       C2.CODE_NAME AS STATUS_VALUE,
+			       CONCAT(IFNULL(A.CUST_NAME, ''), IFNULL(CONCAT(' - ', B.DIV_NAME), ''), IFNULL(CONCAT(' - ', C.DEPT_NAME), '')) AS CUST_INFO,
+			       G.GROUP_NAME,
+			       P.MODEL_NAME,
+			       S.PROD_CODE,
+			       IFNULL(CONCAT(SUBSTRING(M.IN_YMD , 5, 2), '-', SUBSTRING(M.IN_YMD , 7, 2)), '') AS IN_YMD,
+			       IFNULL(CONCAT(SUBSTRING(S.EX_YMD , 5, 2), '-', SUBSTRING(S.EX_YMD , 7, 2)), '') AS EX_YMD,
+			       CONCAT(C1.CODE_NAME, ' - ', S.TROUBLE_MEMO)  AS TROUBLE_VALUE,
+			       CONCAT(C3.CODE_NAME, ' - ', Z.REPAIR_MEMO )  AS REPAIR_VALUE,
+			       CONVERT(Z.REPAIR_AMT, INTEGER) +  CONVERT(Z.TEC_AMT, INTEGER) AS REPAIR_AMT,
+			       S.MEDIA
+			  FROM AS_TCL21 M
+					  LEFT OUTER JOIN AS_TMA60 A 
+						ON A.CUST_CODE = M.CUST_CODE
+					  LEFT OUTER JOIN AS_TMA61 B 
+						ON B.CUST_CODE = M.CUST_CODE
+					   AND B.CUST_DIV  = M.CUST_DIV
+					  LEFT OUTER JOIN AS_TMA63 C
+						ON C.CUST_CODE = M.CUST_CODE
+					   AND C.CUST_DIV  = M.CUST_DIV
+					   AND C.CUST_DEPT = M.CUST_DEPT
+				   ,
+				   AS_TCL22 S
+					  LEFT OUTER JOIN AS_TMA31 G
+						ON G.GROUP_CODE = S.GROUP_CODE
+					  LEFT OUTER JOIN AS_TMA32 P
+						ON P.MODEL_CODE = S.MODEL_CODE
+				      LEFT OUTER JOIN AS_TMA21 F
+				        ON F.MAKER_CODE = P.MAKER_CODE
+					  LEFT OUTER JOIN AS_TMA10 C1
+						ON C1.CODE_TYPE  = S.TROUBLE_TYPE
+					   AND C1.CODE_VALUE = S.TROUBLE_CODE
+					  LEFT OUTER JOIN AS_TMA10 C2
+						ON C2.CODE_TYPE  = 'REPAIR_STAUS_FLAG'
+					   AND C2.CODE_VALUE = S.STATUS_FLAG
+					  LEFT OUTER JOIN AS_TCL31 Z
+					    ON Z.CALL_SEQ    = S.CALL_SEQ
+					   AND Z.ITEM_SEQ    = S.ITEM_SEQ
+					   AND Z.PART_SEQ    = 1
+					  LEFT OUTER JOIN AS_TMA10 C3
+						ON C3.CODE_TYPE  = Z.ERROR_CODE
+					   AND C3.CODE_VALUE = Z.REPAIR_CODE
+			 WHERE 1=1
+			   AND M.CALL_SEQ = S.CALL_SEQ
+			   AND S.STATUS_FLAG >= '50'
+		]]>
+	   	<isNotEmpty property="ymd">
+	   	<![CDATA[
+			   AND M.YMD     = REPLACE(#ymd#, '-', '')
+		]]>
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="ym">
+	  		       M.YMD   LIKE  REPLACE('$ym$%', '-', '')
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="custCode">
+	  		       M.CUST_CODE = #custCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="custDiv">
+	  		       M.CUST_DIV  = #custDiv#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="makerCode">
+	  		       F.MAKER_CODE = #makerCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="groupCode">
+	  		       G.GROUP_CODE = #groupCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="modelCode">
+	  		       P.MODEL_CODE = #modelCode#
+	   	</isNotEmpty>
+	   	<isNotEmpty prepend="AND" property="searchValue">
+	  		       S.PROD_CODE LIKE  #searchValue#
+	   	</isNotEmpty>
+	   	
+	   	<!-- ORDER BY -->
+	   	<isEqual  property="sortTag" compareValue="0">
+	  		ORDER BY M.CALL_SEQ ASC, S.ITEM_SEQ
+	   	</isEqual >
+	   	<isEqual  property="sortTag" compareValue="1">
+	  		ORDER BY A.CUST_NAME, M.CALL_SEQ, S.ITEM_SEQ
+	   	</isEqual >
+	   	<isEqual  property="sortTag" compareValue="2">
+	  		ORDER BY F.MAKER_NAME, G.GROUP_NAME, P.MODEL_NAME, M.CALL_SEQ ASC, S.ITEM_SEQ
+	   	</isEqual >
+	   	<isEqual  property="sortTag" compareValue="3">
+	  		ORDER BY C1.CODE_NAME, M.CALL_SEQ ASC, S.ITEM_SEQ
+	   	</isEqual >
+   		) AS X
+	   , (SELECT @ROWNUM := 0)      AS Y limit  $limit$
+	   )XX 
+	   WHERE XX.RNUM >= $currPage$
+	</select>
+</sqlMap>
+
+

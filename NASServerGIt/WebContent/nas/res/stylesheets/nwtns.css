@@ -1,0 +1,77 @@
+@charset utf-8;
+
+/* CSS 초기화 */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video,button{
+margin:0;
+padding:0;
+border:0;
+font-size:100%;
+vertical-align:baseline;
+background:transparent;
+}
+
+body{
+font-family:NanumGothic,나눔고딕,'Nanum Gothic','맑은 고딕',HelveticaNeue,DroidSans,Sans-serif,Helvetica;
+line-height:1;
+display: flex;
+justify-content:center;
+flex-flow:row wrap;
+/* background-color: #f2f4f7; */
+}
+
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{ 
+display:block;
+}
+
+nav ul, li{
+list-style:none;
+}
+
+a{
+margin:0;
+padding:0;
+font-size:100%;
+text-decoration:none;
+vertical-align:baseline;
+color:#fff;
+background:transparent;
+}
+
+img{
+vertical-align:top;
+}
+
+table{
+border-collapse:collapse;
+border-spacing:0;
+}
+
+input{
+margin:0;
+padding:0;
+box-sizing:content-box;
+vertical-align:top;
+appearance:none;
+border: 1px solid #b4b4b4;
+border-radius:0; 
+font-family:NanumGothic,나눔고딕,'Nanum Gothic','맑은 고딕',HelveticaNeue,DroidSans,Sans-serif,Helvetica;
+}
+
+input::-moz-input-placeholder{
+color:#999;
+}
+
+input::-webkit-input-placeholder {
+color:#999;
+}
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    background-color: rgb(250, 255, 189);
+/*     background-image: none; */
+/*     color: rgb(0, 0, 0); */
+}
+
+
+
+/* 웹폰트 CSS */
+@font-face{font-family:'Nanum Gothic'; src:url(../webfont/NanumGothic.eot)}
